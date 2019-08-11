@@ -37,12 +37,11 @@ function process(req, accessToken, MainDB, $p, done) {
         'profile': $p,
         'createdAt': now
     }).on();
-    MainDB.users.findOne([ '_id', $p.id ]).on(($body) => {
+    MainDB.users.findOne([ '_id', $p.id ])]).on(($body) => {
         req.session.profile = $p;
         MainDB.users.update([ '_id', $p.id ]).set([ 'lastLogin', now ]).on();
-    });
-
-    done(null, $p);
+	});
+        done(null, $p);
 }
 
 exports.run = (Server, page) => {
@@ -72,7 +71,6 @@ exports.run = (Server, page) => {
 				color: auth.config.color,
 				fontColor: auth.config.fontColor
 			};
-
 			JLog.info(`OAuth Strategy ${i} loaded successfully.`)
 		} catch (error) {
 			JLog.error(`OAuth Strategy ${i} is not loaded`)
@@ -101,16 +99,16 @@ exports.run = (Server, page) => {
 		}
 	});
 
-	Server.get("/logout", (req, res) => {
-		if(!req.session.profile){
-			return res.redirect("/");
-		} else {
-			req.session.destroy();
-			res.redirect('/');
-		}
-	});
+        Server.get("/logout", (req, res) => {
+            if(!req.session.profile){
+                return res.redirect("/");
+            } else {
+                req.session.destroy();
+                res.redirect('/');
+            }
+        });
 
-	Server.get("/loginfail", (req, res) => {
-		page(req, res, "loginfail");
-	});
+        Server.get("/loginfail", (req, res) => {
+            page(req, res, "loginfail");
+        });
 }
